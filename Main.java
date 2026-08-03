@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        System.out.print("Hello Everyone");
+        System.out.print("Hello Everyone;");
         String name = "Jay Kumar";
         String nationality = "Indian";
         String state = "Bihar";
@@ -14,7 +14,7 @@ public class Main {
                 + " with pincode " + pincode + ".");
         System.out.println("My post office is in " + postoffice + ", and my contact number is " + phonenumber
                 + ". You can reach me via email at " + email + ".");
-        System.out.println("i currently pursue BTech course with specialization in AI-ML");
+        System.out.println("i currently pursue BTech course with AI-ML specialization ");
         String collegeName = " Government Engineering College, Kaimur";
         String collegetype = "Government_Engg_College";
         String collegestate = "Bihar";
@@ -46,6 +46,7 @@ public class Main {
         String personalStatement = "I am a dedicated and motivated individual with a passion for technology and programming. I am committed to continuous learning and growth in the field of software development.";
         System.out.println(personalStatement);
         System.out.println("Thank you for taking the time to learn more about me!");
-
+        String closingRemark = "I look forward to connecting with like-minded individuals and contributing to the tech community.";
+        System.out.println(closingRemark);
     }
 }
