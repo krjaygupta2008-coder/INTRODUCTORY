@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git & GitHub - Complete Notes</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #f05032;
+            --primary-dark: #d04020;
+            --secondary: #24292e;
+            --accent: #2ea44f;
+            --accent-light: #3fb950;
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --bg-elevated: #21262d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --text-muted: #484f58;
+            --border: #30363d;
+            --gradient-1: #f05032;
+            --gradient-2: #e94e2a;
+            --code-bg: #0d1117;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo i {
+            font-size: 1.6rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+            background: var(--bg-elevated);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            padding: 100px 20px 80px;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-dark) 0%, #111820 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(240, 80, 50, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Section Styling */
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            background: rgba(240, 80, 50, 0.15);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .section-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Roadmap */
+        .roadmap-container {
+            position: relative;
+        }
+
+        .roadmap-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary), var(--accent));
+            transform: translateX(-50%);
+        }
+
+        .roadmap-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .roadmap-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .roadmap-content {
+            width: 45%;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+        }
+
+        .roadmap-content:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .roadmap-item:nth-child(odd) .roadmap-content {
+            margin-right: auto;
+        }
+
+        .roadmap-item:nth-child(even) .roadmap-content {
+            margin-left: auto;
+        }
+
+        .roadmap-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 4px solid var(--bg-dark);
+            z-index: 2;
+        }
+
+        .roadmap-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .roadmap-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .roadmap-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .roadmap-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .roadmap-tag {
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--border);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--gradient-2));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .card-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+        }
+
+        .card-list {
+            list-style: none;
+        }
+
+        .card-list li {
+            padding: 6px 0;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-list li i {
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        /* Cheatsheet */
+        .cheatsheet-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .cheatsheet-tabs {
+            display: flex;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: var(--bg-card);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 32px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cmd-grid {
+            display: grid;
+            gap: 16px;
+        }
+
+        .cmd-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .cmd-item:hover {
+            border-color: var(--primary);
+            background: rgba(240, 80, 50, 0.03);
+        }
+
+        .cmd-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .cmd-code {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.85rem;
+            color: #ff7b72;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .cmd-code:hover {
+            border-color: var(--primary);
+        }
+
+        .cmd-code.copied::after {
+            content: 'Copied!';
+            position: absolute;
+            top: -30px;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            animation: fadeOut 1.5s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            70% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Remarkable Points */
+        .remarkable-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .remark-card {
+            background: linear-gradient(145deg, var(--bg-card), var(--bg-elevated));
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .remark-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+        }
+
+        .remark-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+        }
+
+        .remark-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: rgba(240, 80, 50, 0.1);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            line-height: 1;
+        }
+
+        .remark-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--accent-light);
+        }
+
+        .remark-text {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        /* Progress Indicator */
+        .progress-tracker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            max-width: 500px;
+            margin: 0 auto 60px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 16px 24px 16px 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(240, 80, 50, 0.1);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-4px);
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 24px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--bg-elevated);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .comparison-table td {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+        }
+
+        /* Workflow Diagram */
+        .workflow-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            flex-wrap: wrap;
+            padding: 40px 20px;
+        }
+
+        .workflow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .workflow-box {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            padding: 16px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .workflow-box:hover {
+            border-color: var(--primary);
+            background: rgba(240, 80, 50, 0.05);
+        }
+
+        .workflow-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            padding: 0 12px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 60px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .footer i {
+            color: var(--primary);
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .roadmap-line {
+                left: 20px;
+            }
+
+            .roadmap-item,
+            .roadmap-item:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .roadmap-content {
+                width: calc(100% - 50px);
+                margin-left: 50px !important;
+                margin-right: 0 !important;
+            }
+
+            .roadmap-dot {
+                left: 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cmd-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .cmd-code {
+                justify-self: start;
+            }
+        }
+
+        /* Highlight */
+        .highlight {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .code-inline {
+            background: var(--bg-elevated);
+            color: #ff7b72;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-tracker" id="progressBar"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fab fa-git-alt"></i>
+            Git & GitHub Notes
+        </div>
+        <ul class="nav-links">
+            <li><a href="#roadmap" class="active">Roadmap</a></li>
+            <li><a href="#concepts">Concepts</a></li>
+            <li><a href="#cheatsheet">Cheatsheet</a></li>
+            <li><a href="#workflow">Workflow</a></li>
+            <li><a href="#remarkable">Tips</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <i class="fas fa-star"></i>
+            Complete Learning Guide
+        </div>
+        <h1>Master Git & GitHub</h1>
+        <p>From your first commit to advanced collaboration workflows — everything you need to know in one beautifully
+            crafted reference.</p>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Commands</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Stages</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">20+</div>
+                <div class="stat-label">Pro Tips</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section class="section" id="roadmap">
+        <div class="section-header">
+            <div class="section-tag">Learning Path</div>
+            <h2 class="section-title">Your Git & GitHub Roadmap</h2>
+            <p class="section-desc">A structured path from absolute beginner to confident contributor.</p>
+        </div>
+        <div class="roadmap-container">
+            <div class="roadmap-line"></div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-content">
+                    <div class="roadmap-number">1</div>
+                    <h3 class="roadmap-title">Git Fundamentals</h3>
+                    <p class="roadmap-desc">Understand what version control is, install Git, configure your identity,
+                        and create your first repository.</p>
+                    <div class="roadmap-tags">
+                        <span class="roadmap-tag">Installation</span>
+                        <span class="roadmap-tag">Config</span>
+                        <span class="roadmap-tag">init / clone</span>
+                        <span class="roadmap-tag">Staging</span>
+                    </div>
+                </div>
+                <div class="roadmap-dot"></div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-content">
+                    <div class="roadmap-number">2</div>
+                    <h3 class="roadmap-title">Core Commands & Branching</h3>
+                    <p class="roadmap-desc">Master the daily commands: add, commit, status, log. Learn branching,
+                        merging, and resolving conflicts.</p>
+                    <div class="roadmap-tags">
+                        <span class="roadmap-tag">add / commit</span>
+                        <span class="roadmap-tag">Branch</span>
+                        <span class="roadmap-tag">Merge</span>
+                        <span class="roadmap-tag">Rebase</span>
+                    </div>
+                </div>
+                <div class="roadmap-dot"></div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-content">
+                    <div class="roadmap-number">3</div>
+                    <h3 class="roadmap-title">GitHub Essentials</h3>
+                    <p class="roadmap-desc">Connect local repos to GitHub. Learn push, pull, remote management, and the
+                        GitHub interface basics.</p>
+                    <div class="roadmap-tags">
+                        <span class="roadmap-tag">Remote</span>
+                        <span class="roadmap-tag">Push / Pull</span>
+                        <span class="roadmap-tag">SSH Keys</span>
+                        <span class="roadmap-tag">README</span>
+                    </div>
+                </div>
+                <div class="roadmap-dot"></div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-content">
+                    <div class="roadmap-number">4</div>
+                    <h3 class="roadmap-title">Collaboration Workflows</h3>
+                    <p class="roadmap-desc">Work with teams using Pull Requests, code reviews, fork-based workflows, and
+                        issue tracking.</p>
+                    <div class="roadmap-tags">
+                        <span class="roadmap-tag">Pull Requests</span>
+                        <span class="roadmap-tag">Fork</span>
+                        <span class="roadmap-tag">Issues</span>
+                        <span class="roadmap-tag">Code Review</span>
+                    </div>
+                </div>
+                <div class="roadmap-dot"></div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-content">
+                    <div class="roadmap-number">5</div>
+                    <h3 class="roadmap-title">Advanced Techniques</h3>
+                    <p class="roadmap-desc">Cherry-pick, stash, hooks, submodules, GitHub Actions CI/CD, and advanced
+                        troubleshooting.</p>
+                    <div class="roadmap-tags">
+                        <span class="roadmap-tag">Stash</span>
+                        <span class="roadmap-tag">Cherry-pick</span>
+                        <span class="roadmap-tag">Actions</span>
+                        <span class="roadmap-tag">Bisect</span>
+                    </div>
+                </div>
+                <div class="roadmap-dot"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Concepts -->
+    <section class="section" id="concepts" style="background: var(--bg-card); border-radius: 40px 40px 0 0;">
+        <div class="section-header">
+            <div class="section-tag">Foundation</div>
+            <h2 class="section-title">Core Concepts</h2>
+            <p class="section-desc">Understanding these concepts makes everything else click instantly.</p>
+        </div>
+        <div class="cards-grid">
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-code-branch"></i></div>
+                <h3 class="card-title">Repository (Repo)</h3>
+                <p class="card-text">A project folder tracked by Git. Contains all files, history, and configuration.
+                </p>
+                <ul class="card-list">
+                    <li><i class="fas fa-check"></i> Local repo on your machine</li>
+                    <li><i class="fas fa-check"></i> Remote repo on GitHub/GitLab</li>
+                    <li><i class="fas fa-check"></i> Contains <span class="code-inline">.git/</span> hidden folder</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-layer-group"></i></div>
+                <h3 class="card-title">The Three States</h3>
+                <p class="card-text">Every Git file lives in one of three states. Understanding this is crucial.</p>
+                <ul class="card-list">
+                    <li><i class="fas fa-check"></i> <strong>Modified</strong> — Changed but not staged</li>
+                    <li><i class="fas fa-check"></i> <strong>Staged</strong> — Marked for next commit</li>
+                    <li><i class="fas fa-check"></i> <strong>Committed</strong> — Safely stored in history</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-code-branch"></i></div>
+                <h3 class="card-title">Branching</h3>
+                <p class="card-text">Branches are independent lines of development. Keep <span
+                        class="code-inline">main</span> clean, work on features separately.</p>
+                <ul class="card-list">
+                    <li><i class="fas fa-check"></i> <span class="code-inline">main</span> or <span
+                            class="code-inline">master</span> — production</li>
+                    <li><i class="fas fa-check"></i> <span class="code-inline">feature/*</span> — new features</li>
+                    <li><i class="fas fa-check"></i> <span class="code-inline">hotfix/*</span> — urgent fixes</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-code-commit"></i></div>
+                <h3 class="card-title">Commit</h3>
+                <p class="card-text">A snapshot of your project at a point in time. Think of it as a "save point" with a
+                    message.</p>
+                <ul class="card-list">
+                    <li><i class="fas fa-check"></i> Has a unique SHA hash ID</li>
+                    <li><i class="fas fa-check"></i> Contains author, date, message</li>
+                    <li><i class="fas fa-check"></i> Write meaningful messages!</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-globe"></i></div>
+                <h3 class="card-title">Remote vs Local</h3>
+                <p class="card-text">Local is your machine. Remote is the shared server (GitHub). Sync between them with
+                    push/pull.</p>
+                <ul class="card-list">
+                    <li><i class="fas fa-check"></i> <span class="code-inline">origin</span> = default remote name</li>
+                    <li><i class="fas fa-check"></i> <span class="code-inline">push</span> sends your changes up</li>
+                    <li><i class="fas fa-check"></i> <span class="code-inline">pull</span> fetches and merges</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="card-title">.gitignore</h3>
+                <p class="card-text">A file telling Git what NOT to track. Essential for security and cleanliness.</p>
+                <ul class="card-list">
+                    <li><i class="fas fa-check"></i> <span class="code-inline">node_modules/</span></li>
+                    <li><i class="fas fa-check"></i> <span class="code-inline">.env</span> files with secrets</li>
+                    <li><i class="fas fa-check"></i> Build outputs, logs, temp files</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Git Workflow Visual -->
+    <section class="section" id="workflow">
+        <div class="section-header">
+            <div class="section-tag">Visual Guide</div>
+            <h2 class="section-title">The Git Workflow</h2>
+            <p class="section-desc">How your code moves from your editor to the remote repository.</p>
+        </div>
+        <div class="workflow-container">
+            <div class="workflow-step">
+                <div class="workflow-box"><i class="fas fa-edit"></i> Edit Files</div>
+            </div>
+            <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="workflow-step">
+                <div class="workflow-box"><i class="fas fa-plus"></i> git add</div>
+            </div>
+            <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="workflow-step">
+                <div class="workflow-box"><i class="fas fa-check-circle"></i> git commit</div>
+            </div>
+            <div class="workflow-arrow"><i class="fas fa-arrow-right"></i></div>
+            <div class="workflow-step">
+                <div class="workflow-box"><i class="fas fa-cloud-upload-alt"></i> git push</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Area</th>
+                        <th>Description</th>
+                        <th>Key Commands</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Working Directory</strong></td>
+                        <td>Where you edit files. Changes here are untracked or modified.</td>
+                        <td><span class="code-inline">git status</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Staging Area (Index)</strong></td>
+                        <td>A temporary holding area. You selectively choose what goes into the next commit.</td>
+                        <td><span class="code-inline">git add</span>, <span class="code-inline">git rm --cached</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Local Repository</strong></td>
+                        <td>Committed snapshots stored on your machine. Full history lives here.</td>
+                        <td><span class="code-inline">git commit</span>, <span class="code-inline">git log</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Remote Repository</strong></td>
+                        <td>The shared server (GitHub). Collaborators push and pull from here.</td>
+                        <td><span class="code-inline">git push</span>, <span class="code-inline">git pull</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Cheatsheet Section -->
+    <section class="section" id="cheatsheet" style="background: var(--bg-card); border-radius: 40px 40px 0 0;">
+        <div class="section-header">
+            <div class="section-tag">Quick Reference</div>
+            <h2 class="section-title">Command Cheatsheet</h2>
+            <p class="section-desc">Click any command to copy it to your clipboard.</p>
+        </div>
+
+        <div class="cheatsheet-wrapper">
+            <div class="cheatsheet-tabs">
+                <button class="tab-btn active" onclick="showTab('setup')">Setup & Config</button>
+                <button class="tab-btn" onclick="showTab('basic')">Basic Commands</button>
+                <button class="tab-btn" onclick="showTab('branching')">Branching</button>
+                <button class="tab-btn" onclick="showTab('remote')">Remote & Sync</button>
+                <button class="tab-btn" onclick="showTab('undo')">Undo & Fix</button>
+                <button class="tab-btn" onclick="showTab('advanced')">Advanced</button>
+            </div>
+
+            <div id="setup" class="tab-content active">
+                <div class="cmd-grid">
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Check Git version</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git --version</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Set your name (global)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git config --global user.name "Your Name"</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Set your email (global)</span>
+                        <code class="cmd-code"
+                            onclick="copyCmd(this)">git config --global user.email "you@email.com"</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Set default branch name</span>
+                        <code class="cmd-code"
+                            onclick="copyCmd(this)">git config --global init.defaultBranch main</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Open global config in editor</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git config --global --edit</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Initialize a new repository</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git init</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Clone a repository</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git clone &lt;url&gt;</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Clone into specific folder</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git clone &lt;url&gt; &lt;folder&gt;</code>
+                    </div>
+                </div>
+            </div>
+
+            <div id="basic" class="tab-content">
+                <div class="cmd-grid">
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Check repository status</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git status</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Stage a specific file</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git add filename.txt</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Stage all changes</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git add .</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Stage all modified files (not new)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git add -u</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Commit staged changes</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git commit -m "Your message"</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Stage and commit in one</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git commit -am "Your message"</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">View commit history</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git log</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Pretty one-line log</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git log --oneline --graph</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Show changes in working directory</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git diff</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Show staged changes</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git diff --staged</code>
+                    </div>
+                </div>
+            </div>
+
+            <div id="branching" class="tab-content">
+                <div class="cmd-grid">
+                    <div class="cmd-item">
+                        <span class="cmd-desc">List all branches</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git branch</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">List all branches (including remote)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git branch -a</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Create a new branch</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git branch feature-name</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Switch to a branch</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git checkout feature-name</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Create and switch (modern)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git switch -c feature-name</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Merge branch into current</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git merge feature-name</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Delete a merged branch</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git branch -d feature-name</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Force delete a branch</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git branch -D feature-name</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Rebase current onto another</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git rebase main</code>
+                    </div>
+                </div>
+            </div>
+
+            <div id="remote" class="tab-content">
+                <div class="cmd-grid">
+                    <div class="cmd-item">
+                        <span class="cmd-desc">List remote connections</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git remote -v</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Add a remote repository</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git remote add origin &lt;url&gt;</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Push branch to remote</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git push origin main</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Push and set upstream</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git push -u origin main</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Fetch changes from remote</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git fetch origin</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Pull (fetch + merge)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git pull origin main</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Pull with rebase instead of merge</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git pull --rebase origin main</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Remove a remote</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git remote remove origin</code>
+                    </div>
+                </div>
+            </div>
+
+            <div id="undo" class="tab-content">
+                <div class="cmd-grid">
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Unstage a file (keep changes)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git restore --staged filename.txt</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Discard changes in a file</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git restore filename.txt</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Amend last commit</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git commit --amend -m "New message"</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Soft reset (keep changes staged)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git reset --soft HEAD~1</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Mixed reset (keep changes unstaged)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git reset --mixed HEAD~1</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Hard reset (destroy changes)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git reset --hard HEAD~1</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">View reflog (safety net)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git reflog</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Temporarily save changes</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git stash</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Apply stashed changes</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git stash pop</code>
+                    </div>
+                </div>
+            </div>
+
+            <div id="advanced" class="tab-content">
+                <div class="cmd-grid">
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Apply a specific commit to current branch</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git cherry-pick &lt;commit-hash&gt;</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Find which commit introduced a bug</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git bisect start</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Show who changed each line</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git blame filename.txt</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Create a tag</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git tag -a v1.0 -m "Version 1.0"</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Push tags to remote</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git push origin --tags</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Clean untracked files</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git clean -fd</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Interactive rebase (squash commits)</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git rebase -i HEAD~3</code>
+                    </div>
+                    <div class="cmd-item">
+                        <span class="cmd-desc">Archive current branch</span>
+                        <code class="cmd-code" onclick="copyCmd(this)">git archive -o latest.zip HEAD</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Git vs GitHub -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-tag">Clarification</div>
+            <h2 class="section-title">Git vs GitHub</h2>
+            <p class="section-desc">They're related but not the same. Here's the difference.</p>
+        </div>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Aspect</th>
+                    <th>Git</th>
+                    <th>GitHub</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>What it is</strong></td>
+                    <td>A distributed version control system (software)</td>
+                    <td>A web-based hosting service for Git repositories</td>
+                </tr>
+                <tr>
+                    <td><strong>Function</strong></td>
+                    <td>Tracks code changes locally on your machine</td>
+                    <td>Hosts repositories online for collaboration</td>
+                </tr>
+                <tr>
+                    <td><strong>Requires internet</strong></td>
+                    <td>No — works entirely offline</td>
+                    <td>Yes — it's a web platform</td>
+                </tr>
+                <tr>
+                    <td><strong>Created by</strong></td>
+                    <td>Linus Torvalds (2005)</td>
+                    <td>GitHub, Inc. — now owned by Microsoft</td>
+                </tr>
+                <tr>
+                    <td><strong>Alternatives</strong></td>
+                    <td>SVN, Mercurial, Perforce</td>
+                    <td>GitLab, Bitbucket, Gitea, Codeberg</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Remarkable Points -->
+    <section class="section" id="remarkable" style="background: var(--bg-card); border-radius: 40px 40px 0 0;">
+        <div class="section-header">
+            <div class="section-tag">Pro Knowledge</div>
+            <h2 class="section-title">20 Remarkable Points</h2>
+            <p class="section-desc">Tips, gotchas, and wisdom that separate beginners from pros.</p>
+        </div>
+        <div class="remarkable-grid">
+            <div class="remark-card">
+                <div class="remark-number">01</div>
+                <h3 class="remark-title">Commit Early, Commit Often</h3>
+                <p class="remark-text">Small, frequent commits are better than giant ones. They're easier to review,
+                    revert, and understand in history.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">02</div>
+                <h3 class="remark-title">Write Imperative Commit Messages</h3>
+                <p class="remark-text">Use "Add feature" not "Added feature" or "Adding feature." A commit message
+                    should complete this sentence: "If applied, this commit will ___"</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">03</div>
+                <h3 class="remark-title">Never Commit Secrets</h3>
+                <p class="remark-text">Once a secret (API key, password) is committed, it's in history forever. Use
+                    <span class="code-inline">.gitignore</span> and tools like GitGuardian.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">04</div>
+                <h3 class="remark-title">Use Branches for Everything</h3>
+                <p class="remark-text">Never commit directly to <span class="code-inline">main</span> in team projects.
+                    Create a branch, make a PR, get it reviewed, then merge.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">05</div>
+                <h3 class="remark-title">Pull Before You Push</h3>
+                <p class="remark-text">Always <span class="code-inline">git pull</span> before <span
+                        class="code-inline">git push</span> to avoid merge conflicts and rejected pushes.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">06</div>
+                <h3 class="remark-title">Reflog is Your Time Machine</h3>
+                <p class="remark-text">Even after a bad reset, <span class="code-inline">git reflog</span> keeps a
+                    record. You can recover almost anything for about 90 days.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">07</div>
+                <h3 class="remark-title">.gitignore Before First Commit</h3>
+                <p class="remark-text">Set up your <span class="code-inline">.gitignore</span> before committing.
+                    Removing tracked files later is a headache.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">08</div>
+                <h3 class="remark-title">SSH Keys > HTTPS Passwords</h3>
+                <p class="remark-text">Set up SSH keys for GitHub. No more typing passwords, and it's more secure.
+                    Generate with <span class="code-inline">ssh-keygen</span>.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">09</div>
+                <h3 class="remark-title">Stash Before Switching</h3>
+                <p class="remark-text">Got uncommitted changes and need to switch branches? <span
+                        class="code-inline">git stash</span> saves them temporarily without a commit.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">10</div>
+                <h3 class="remark-title">Atomic Commits</h3>
+                <p class="remark-text">One commit = one logical change. Don't mix bug fixes with feature additions in
+                    the same commit.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">11</div>
+                <h3 class="remark-title">Rebase for Clean History</h3>
+                <p class="remark-text">Use <span class="code-inline">git rebase</span> to linearize history before
+                    merging. It makes the log much easier to read.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">12</div>
+                <h3 class="remark-title">Use Meaningful Branch Names</h3>
+                <p class="remark-text">Name branches descriptively: <span
+                        class="code-inline">feature/user-authentication</span>, <span
+                        class="code-inline">bugfix/login-error</span>, <span
+                        class="code-inline">hotfix/security-patch</span>.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">13</div>
+                <h3 class="remark-title">Review with git diff</h3>
+                <p class="remark-text">Always run <span class="code-inline">git diff</span> before committing. You'll
+                    catch debugging code, typos, and accidental changes.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">14</div>
+                <h3 class="remark-title">GitHub Issues = Project Management</h3>
+                <p class="remark-text">Use GitHub Issues to track bugs, features, and tasks. Link them in PRs with
+                    "Fixes #123" to auto-close.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">15</div>
+                <h3 class="remark-title">Protect Your Main Branch</h3>
+                <p class="remark-text">On GitHub, enable branch protection rules: require PR reviews, status checks, and
+                    prevent force pushes.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">16</div>
+                <h3 class="remark-title">GitHub Actions for CI/CD</h3>
+                <p class="remark-text">Automate testing, building, and deployment with GitHub Actions workflows defined
+                    in <span class="code-inline">.github/workflows/</span>.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">17</div>
+                <h3 class="remark-title">README is Your Landing Page</h3>
+                <p class="remark-text">A good README includes: what, why, how to install, how to use, and how to
+                    contribute. It's your project's first impression.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">18</div>
+                <h3 class="remark-title">Fork for Open Source</h3>
+                <p class="remark-text">To contribute to projects you don't own: Fork → Clone → Branch → Commit → Push →
+                    Pull Request.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">19</div>
+                <h3 class="remark-title">Git is Distributed</h3>
+                <p class="remark-text">Every clone is a full backup. If GitHub goes down, anyone with the repo has the
+                    complete history.</p>
+            </div>
+            <div class="remark-card">
+                <div class="remark-number">20</div>
+                <h3 class="remark-title">Learn vim basics (or set default editor)</h3>
+                <p class="remark-text">Git opens vim by default for interactive operations. Learn <span
+                        class="code-inline">:q!</span> or set your preferred editor with <span class="code-inline">git
+                        config core.editor</span>.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Made with <i class="fas fa-heart"></i> for Git learners everywhere</p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">Happy committing!</p>
+    </footer>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Tab switching
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Copy command
+        function copyCmd(element) {
+            navigator.clipboard.writeText(element.textContent).then(() => {
+                element.classList.add('copied');
+                setTimeout(() => element.classList.remove('copied'), 1500);
+            });
+        }
+
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+
+        // Back to top
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 500);
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Active nav link
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
